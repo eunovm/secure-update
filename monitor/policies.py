@@ -1,4 +1,8 @@
+is_verified = False
+
 def check_operation(id, details):
+    global is_verified
+
     authorized = False
     # print(f"[debug] checking policies for event {id}, details: {details}")
     print(f"[info] checking policies for event {id},"\
@@ -11,6 +15,8 @@ def check_operation(id, details):
         authorized = True    
     if src == 'manager' and dst == 'downloader' \
         and operation == 'download_file':
+        # Download new update that should be handled by Verifier.
+        is_verified = False
         authorized = True    
     if src == 'manager' and dst == 'storage' \
         and operation == 'commit_blob':
@@ -20,10 +26,13 @@ def check_operation(id, details):
         authorized = True    
     if src == 'verifier' and dst == 'manager' \
         and operation == 'handle_verification_result':
-        authorized = True    
+        # Securely keep status for verification of update. We can rely on Verifier.
+        is_verified = details['verified']
+        authorized = True
+    # Do not allow to update unless verification successfully passed.
     if src == 'manager' and dst == 'updater' \
         and operation == 'proceed_with_update' \
-        and details['verified'] is True:
+        and is_verified:
         authorized = True    
     if src == 'storage' and dst == 'manager' \
         and operation == 'blob_committed':

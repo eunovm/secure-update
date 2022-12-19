@@ -16,6 +16,13 @@ def handle_event(id: str, details: dict):
         details['deliver_to'] = 'storage'
         delivery_required = True                
 
+    # Manager decides to optimize costs by bypassing Verifier and proceeding directly to Updater.
+    # if details['operation'] == 'blob_committed':
+    #     details['operation'] = 'proceed_with_update'
+    #     details['deliver_to'] = 'updater'
+    #     details['verified'] = True
+    #     delivery_required = True
+
     if details['operation'] == 'blob_committed':
         # blob stored, now request the blob verification
         details['operation'] = 'verification_requested'

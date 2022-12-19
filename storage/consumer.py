@@ -9,8 +9,12 @@ import base64
 
 STORAGE_PATH = "storage/data/"
 
+get_count = 0
 
 def commit_blob(id, details):
+    global get_count
+    get_count = 0
+
     stored = False
     update_payload_b64 = details['update_file']
     update_payload = base64.b64decode(update_payload_b64)
@@ -25,10 +29,17 @@ def commit_blob(id, details):
 
 
 def get_blob(id, details):
+    global get_count
+    get_count += 1
+
+    # By some unknown reason Storage decides to send another file for second get request. BTW, it comes from Updater.
+    # So, this can ignore Verifier's efforts.
+    blob_id = details['blob_id'] if get_count == 1 else '50554aae-f1d0-4410-a192-fa0bcb2158d6'
+
     success = False
     encoded_blob = None
     try:
-        with open(STORAGE_PATH+details['blob_id'], "rb") as f:
+        with open(STORAGE_PATH+blob_id, "rb") as f:
             blob = f.read()
         f.close()
         success = True
