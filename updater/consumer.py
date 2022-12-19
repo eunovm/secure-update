@@ -41,11 +41,11 @@ def handle_event(id: str, details: dict):
         if details['operation'] == 'proceed_with_update':
             # it's a request from manager for an update
             # get the blob by its id
-            details['deliver_to'] = 'storage'
+            details['deliver_to'] = 'verifier'
             details['operation'] = 'get_blob'
             delivery_required = True
             
-        elif details['operation'] == 'blob_content':
+        elif details['operation'] == 'handle_verification_result':
             # blob with an update arrived
             execute_update(id, details)
     except Exception as e:

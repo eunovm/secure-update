@@ -34,7 +34,9 @@ def get_blob(id, details):
 
     # By some unknown reason Storage decides to send another file for second get request. BTW, it comes from Updater.
     # So, this can ignore Verifier's efforts.
-    blob_id = details['blob_id'] if get_count == 1 else '50554aae-f1d0-4410-a192-fa0bcb2158d6'
+    # blob_id = details['blob_id'] if get_count == 1 else '50554aae-f1d0-4410-a192-fa0bcb2158d6'
+
+    blob_id = details['blob_id']
 
     success = False
     encoded_blob = None

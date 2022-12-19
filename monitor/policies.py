@@ -42,12 +42,13 @@ def check_operation(id, details):
         authorized = True
     if src == 'storage' and dst == 'verifier' \
         and operation == 'blob_content':
-        authorized = True    
-    if src == 'updater' and dst == 'storage' \
+        authorized = True
+    if src == 'updater' and dst == 'verifier' \
         and operation == 'get_blob':
         authorized = True
-    if src == 'storage' and dst == 'updater' \
-        and operation == 'blob_content':
+    if src == 'verifier' and dst == 'updater' \
+        and operation == 'handle_verification_result' \
+        and details['verified']:
         authorized = True
     # kea - Kafka events analyzer - an extra service for internal monitoring,
     # can only communicate with itself

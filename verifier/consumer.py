@@ -39,7 +39,7 @@ def handle_event(id, details_str):
     print(f"[info] handling event {id}, {details['source']}->{details['deliver_to']}: {details['operation']}")
     try:
         delivery_required = False
-        if details['operation'] == 'verification_requested':
+        if details['operation'] in ('verification_requested', 'get_blob'):
             # get the blob for verification from storage
             details['deliver_to'] = 'storage'
             details['operation'] = 'get_blob'
@@ -50,7 +50,7 @@ def handle_event(id, details_str):
         elif details['operation'] == 'blob_content':
             # got the blob from storage, verify and notify manager
             verified = verify_payload(details)
-            cleanup_extra_fields(details)
+            # cleanup_extra_fields(details)
             details['operation'] = 'handle_verification_result'
             details['verified'] = verified
             if not verified:
